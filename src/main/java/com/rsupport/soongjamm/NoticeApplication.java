@@ -1,4 +1,4 @@
-package com.rsupport.soongjamm.notice;
+package com.rsupport.soongjamm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
