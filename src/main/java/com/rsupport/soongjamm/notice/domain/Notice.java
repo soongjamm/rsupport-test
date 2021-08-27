@@ -1,6 +1,7 @@
 package com.rsupport.soongjamm.notice.domain;
 
 import com.rsupport.soongjamm.common.BaseTimeEntity;
+import lombok.Builder;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,8 +15,8 @@ import java.util.Objects;
 @Getter
 @Entity
 public class Notice extends BaseTimeEntity {
-	private static final int MAX_TITLE_LENGTH = 50;
-	private static final int MAX_TITLE_CONTENT = 400;
+	public static final int MAX_TITLE_LENGTH = 50;
+	public static final int MAX_TITLE_CONTENT = 400;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +30,14 @@ public class Notice extends BaseTimeEntity {
 
 	public Notice(String title, String author, String content) {
 		validateNotice(title, content);
+		this.title = title;
+		this.author = author;
+		this.content = content;
+	}
+
+	@Builder
+	Notice(Long id, String title, String author, String content) {
+		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.content = content;
@@ -60,6 +69,19 @@ public class Notice extends BaseTimeEntity {
 				", author='" + author + '\'' +
 				", content='" + content + '\'' +
 				"} " + super.toString();
+	}
+
+	public void update(String title, String content, String author) {
+		validateUpdatable(title, content, author);
+		this.title = title;
+		this.content = content;
+	}
+
+	private void validateUpdatable(String title, String content, String author) {
+		validateNotice(title, content);
+		if (!author.equals(this.author)) {
+			throw new IllegalArgumentException("작성자만 글을 수정할 수 있습니다.");
+		}
 	}
 
 	private void validateNotice(String title, String content) {
