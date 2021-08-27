@@ -4,6 +4,7 @@ import com.rsupport.soongjamm.notice.application.CreateNoticeTarget;
 import com.rsupport.soongjamm.notice.application.UpdateNoticeTarget;
 import com.rsupport.soongjamm.notice.domain.Notice;
 import com.rsupport.soongjamm.notice.interfaces.CreateNoticeRequest;
+import com.rsupport.soongjamm.notice.interfaces.DeleteNoticeRequest;
 import com.rsupport.soongjamm.notice.interfaces.UpdateNoticeRequest;
 
 public class TestData {
@@ -45,5 +46,10 @@ public class TestData {
 				.author(request.getAuthor())
 				.title(request.getTitle())
 				.content(request.getContent());
+	}
+
+	public static DeleteNoticeRequest.DeleteNoticeRequestBuilder deleteNoticeRequest() {
+		return DeleteNoticeRequest.builder()
+				.author("작성자");
 	}
 }

@@ -7,4 +7,6 @@ public interface NoticeService {
 	Notice createNotice(CreateNoticeTarget target);
 
 	Notice updateNotice(UpdateNoticeTarget toTarget);
+
+	void deleteNotice(DeleteNoticeTarget serviceTarget);
 }

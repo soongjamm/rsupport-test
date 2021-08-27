@@ -11,4 +11,7 @@ public interface NoticeController {
 
 	@PutMapping("/{noticeId}")
 	ResponseEntity<?> updateNotice(@RequestBody UpdateNoticeRequest dto, @PathVariable Long noticeId);
+
+	@DeleteMapping("/{noticeId}")
+	ResponseEntity<?> deleteNotice(@RequestBody DeleteNoticeRequest dto, @PathVariable Long noticeId);
 }

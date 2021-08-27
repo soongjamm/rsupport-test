@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.rsupport.soongjamm.notice.domain.NoticeRepository;
 import com.rsupport.soongjamm.notice.interfaces.CreateNoticeRequest;
+import com.rsupport.soongjamm.notice.interfaces.DeleteNoticeRequest;
 import com.rsupport.soongjamm.notice.interfaces.NoticeDetail;
 import com.rsupport.soongjamm.notice.interfaces.UpdateNoticeRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -32,7 +34,6 @@ public class NoticeIntegrationTest {
 	void setup() {
 		template = new TestRestTemplate();
 		template.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:" + port + "/api/notices"));
-		noticeRepository.save(notice().build());
 	}
 
 	@Test
@@ -53,6 +54,7 @@ public class NoticeIntegrationTest {
 	@Test
 	void update_notice_test() {
 	    //given
+		noticeRepository.save(notice().build());
 		UpdateNoticeRequest requestDto = updateNoticeRequest().build();
 		HttpEntity<UpdateNoticeRequest> requestEntity = new HttpEntity<>(requestDto);
 
@@ -64,5 +66,19 @@ public class NoticeIntegrationTest {
 		assertThat(result.getBody().getTitle()).isEqualTo(requestDto.getTitle());
 		assertThat(result.getBody().getAuthor()).isEqualTo(requestDto.getAuthor());
 		assertThat(result.getBody().getContent()).isEqualTo(requestDto.getContent());
+	}
+
+	@Test
+	@DirtiesContext
+	void delete_notice_test() {
+		//given
+		DeleteNoticeRequest requestDto = deleteNoticeRequest().build();
+		HttpEntity<DeleteNoticeRequest> requestEntity = new HttpEntity<>(requestDto);
+
+		//when
+		ResponseEntity<Void> result = template.exchange("/{noticeId}", HttpMethod.DELETE, requestEntity, Void.class, 1L);
+
+		//then
+		result.getStatusCode().is2xxSuccessful();
 	}
 }

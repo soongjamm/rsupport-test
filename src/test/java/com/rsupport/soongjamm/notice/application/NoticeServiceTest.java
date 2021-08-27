@@ -15,6 +15,7 @@ import static com.rsupport.soongjamm.notice.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class NoticeServiceTest {
@@ -34,7 +35,7 @@ class NoticeServiceTest {
 		Notice notice = noticeService.createNotice(target);
 
 		//then
-		assertThat(notice).isInstanceOf(Notice.class);
+		verify(noticeRepository).save(target.toEntity());
 	}
 
 	@Test
@@ -123,5 +124,19 @@ class NoticeServiceTest {
 		//when
 		//then
 		assertThrows(IllegalArgumentException.class, () -> noticeService.updateNotice(target));
+	}
+
+	@Test
+	void delete_notice_succeed_if_validated() {
+		//given
+		Notice notice = notice().build();
+		DeleteNoticeTarget target = DeleteNoticeTarget.builder().author(notice.getAuthor()).noticeId(notice.getId()).build();
+		given(noticeRepository.findById(target.getNoticeId())).willReturn(Optional.of(notice));
+
+		//when
+		noticeService.deleteNotice(target);
+
+		//then
+		verify(noticeRepository).delete(notice);
 	}
 }

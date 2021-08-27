@@ -1,6 +1,7 @@
 package com.rsupport.soongjamm.notice.domain;
 
 import com.rsupport.soongjamm.common.BaseTimeEntity;
+import com.rsupport.soongjamm.notice.application.impl.UnauthorizedTaskException;
 import lombok.Builder;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
@@ -53,6 +54,7 @@ public class Notice extends BaseTimeEntity {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Notice notice = (Notice) o;
+		if (id == null && notice.id == null) return true;
 		return id.equals(notice.id);
 	}
 
@@ -79,8 +81,12 @@ public class Notice extends BaseTimeEntity {
 
 	private void validateUpdatable(String title, String content, String author) {
 		validateNotice(title, content);
+		validateAuthor(author);
+	}
+
+	public void validateAuthor(String author) {
 		if (!author.equals(this.author)) {
-			throw new IllegalArgumentException("작성자만 글을 수정할 수 있습니다.");
+			throw new UnauthorizedTaskException("작성자만 글을 수정/삭제 할 수 있습니다.");
 		}
 	}
 

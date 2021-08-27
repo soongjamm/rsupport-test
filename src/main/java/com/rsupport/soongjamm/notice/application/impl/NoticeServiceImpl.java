@@ -1,6 +1,7 @@
 package com.rsupport.soongjamm.notice.application.impl;
 
 import com.rsupport.soongjamm.notice.application.CreateNoticeTarget;
+import com.rsupport.soongjamm.notice.application.DeleteNoticeTarget;
 import com.rsupport.soongjamm.notice.application.UpdateNoticeTarget;
 import com.rsupport.soongjamm.notice.domain.NoticeRepository;
 import com.rsupport.soongjamm.notice.application.NoticeService;
@@ -19,8 +20,7 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public Notice createNotice(CreateNoticeTarget target) {
 		Notice notice = target.toEntity();
-		noticeRepository.save(notice);
-		return notice;
+		return noticeRepository.save(notice);
 	}
 
 	@Override
@@ -28,5 +28,12 @@ public class NoticeServiceImpl implements NoticeService {
 		Notice notice = noticeRepository.findById(target.getNoticeId()).orElseThrow(() -> new IllegalArgumentException("잘못된 공지번호 입니다."));
 		notice.update(target.getTitle(), target.getContent(), target.getAuthor());
 		return notice;
+	}
+
+	@Override
+	public void deleteNotice(DeleteNoticeTarget target) {
+		Notice notice = noticeRepository.findById(target.getNoticeId()).orElseThrow(() -> new IllegalArgumentException("잘못된 공지번호 입니다."));
+		notice.validateAuthor(target.getAuthor());
+		noticeRepository.delete(notice);
 	}
 }

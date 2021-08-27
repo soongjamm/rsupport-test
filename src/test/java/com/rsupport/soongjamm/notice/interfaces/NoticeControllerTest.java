@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.rsupport.soongjamm.notice.application.CreateNoticeTarget;
+import com.rsupport.soongjamm.notice.application.DeleteNoticeTarget;
 import com.rsupport.soongjamm.notice.application.NoticeService;
 import com.rsupport.soongjamm.notice.application.UpdateNoticeTarget;
+import com.rsupport.soongjamm.notice.application.impl.UnauthorizedTaskException;
 import com.rsupport.soongjamm.notice.interfaces.impl.NoticeControllerImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +22,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static com.rsupport.soongjamm.notice.TestData.*;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.doThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -82,7 +85,6 @@ class NoticeControllerTest {
 				.andExpect(jsonPath("$.content").value(requestBody.getContent()));
 	}
 
-
 	@Test
 	void update_notice_validation_fail_return_409_status() throws Exception {
 		//given
@@ -97,6 +99,38 @@ class NoticeControllerTest {
 		//then
 		perform
 				.andExpect(status().isConflict());
+	}
+
+	@Test
+	void delete_notice_always_return_204_no_content() throws Exception {
+		//given
+		DeleteNoticeRequest requestBody = deleteNoticeRequest().build();
+		DeleteNoticeTarget serviceTarget = requestBody.toTarget(1L);
+
+		//when
+		ResultActions perform = mvc.perform(delete(baseUrl + "/{noticeId}", serviceTarget.getNoticeId()).contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(requestBody)));
+
+		//then
+		perform
+				.andExpect(status().isNoContent());
+	}
+
+
+	@Test
+	void delete_notice_from_not_authorized_return_401_unauthorized() throws Exception {
+		//given
+		DeleteNoticeRequest requestBody = deleteNoticeRequest().author("불량유저").build();
+		DeleteNoticeTarget serviceTarget = requestBody.toTarget(1L);
+		doThrow(new UnauthorizedTaskException()).when(noticeService).deleteNotice(serviceTarget);
+
+		//when
+		ResultActions perform = mvc.perform(delete(baseUrl + "/{noticeId}", serviceTarget.getNoticeId()).contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(requestBody)));
+
+		//then
+		perform
+				.andExpect(status().isUnauthorized());
 	}
 
 }
