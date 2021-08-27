@@ -1,12 +1,18 @@
 package com.rsupport.soongjamm.notice.application.impl;
 
+import com.rsupport.soongjamm.notice.Notices;
 import com.rsupport.soongjamm.notice.application.CreateNoticeTarget;
 import com.rsupport.soongjamm.notice.application.DeleteNoticeTarget;
 import com.rsupport.soongjamm.notice.application.UpdateNoticeTarget;
 import com.rsupport.soongjamm.notice.domain.NoticeRepository;
 import com.rsupport.soongjamm.notice.application.NoticeService;
 import com.rsupport.soongjamm.notice.domain.Notice;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NoticeServiceImpl implements NoticeService {
@@ -15,6 +21,13 @@ public class NoticeServiceImpl implements NoticeService {
 
 	public NoticeServiceImpl(NoticeRepository noticeRepository) {
 		this.noticeRepository = noticeRepository;
+	}
+
+	@Override
+	public Notices getNotices(PageRequest pageRequest) {
+		Page<Notice> found = noticeRepository.findAll(pageRequest);
+		List<Notice> collect = found.stream().collect(Collectors.toList());
+		return new Notices(collect, found.getTotalPages(), pageRequest.getPageNumber());
 	}
 
 	@Override

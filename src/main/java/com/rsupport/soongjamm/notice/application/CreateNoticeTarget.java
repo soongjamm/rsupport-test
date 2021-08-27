@@ -6,7 +6,6 @@ import lombok.*;
 
 @Builder
 @EqualsAndHashCode
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class CreateNoticeTarget {

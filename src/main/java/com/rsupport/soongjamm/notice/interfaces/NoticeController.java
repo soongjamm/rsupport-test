@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/notices")
 public interface NoticeController {
 
+	@GetMapping
+	ResponseEntity<?> getNoticeList(@RequestParam Integer limit, @RequestParam Integer offset);
+
 	@PostMapping
 	ResponseEntity<?> createNotice(@RequestBody CreateNoticeRequest dto);
 

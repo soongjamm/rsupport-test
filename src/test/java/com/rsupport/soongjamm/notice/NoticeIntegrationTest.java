@@ -3,6 +3,7 @@ package com.rsupport.soongjamm.notice;
 import static com.rsupport.soongjamm.notice.TestData.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.rsupport.soongjamm.notice.domain.Notice;
 import com.rsupport.soongjamm.notice.domain.NoticeRepository;
 import com.rsupport.soongjamm.notice.interfaces.CreateNoticeRequest;
 import com.rsupport.soongjamm.notice.interfaces.DeleteNoticeRequest;
@@ -20,6 +21,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class NoticeIntegrationTest {
 
@@ -34,6 +38,28 @@ public class NoticeIntegrationTest {
 	void setup() {
 		template = new TestRestTemplate();
 		template.setUriTemplateHandler(new DefaultUriBuilderFactory("http://localhost:" + port + "/api/notices"));
+	}
+
+	@Test
+	void get_notice_list() {
+		//given
+		List<Notice> init = new ArrayList<>();
+		for (long i = 1; i <= 30; i++) {
+			init.add(notice().id(i).title("title : " + i).build());
+		}
+		noticeRepository.saveAllAndFlush(init);
+		System.out.println(noticeRepository.findAll());
+		int offset = 1;
+		int limit = 10;
+
+		//when
+		ResponseEntity<Notices> result = template.getForEntity("/?offset={offset}&limit={limit}", Notices.class, offset, limit);
+		List<Notice> notices = result.getBody().getNotices();
+
+		//then
+		result.getStatusCode().is2xxSuccessful();
+		assertThat(notices.size()).isEqualTo(10);
+		assertThat(notices.get(0).getId()).isEqualTo(20);
 	}
 
 	@Test
@@ -53,7 +79,7 @@ public class NoticeIntegrationTest {
 
 	@Test
 	void update_notice_test() {
-	    //given
+		//given
 		noticeRepository.save(notice().build());
 		UpdateNoticeRequest requestDto = updateNoticeRequest().build();
 		HttpEntity<UpdateNoticeRequest> requestEntity = new HttpEntity<>(requestDto);

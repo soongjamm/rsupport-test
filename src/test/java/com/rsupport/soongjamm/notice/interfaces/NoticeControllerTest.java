@@ -122,7 +122,7 @@ class NoticeControllerTest {
 		//given
 		DeleteNoticeRequest requestBody = deleteNoticeRequest().author("불량유저").build();
 		DeleteNoticeTarget serviceTarget = requestBody.toTarget(1L);
-		doThrow(new UnauthorizedTaskException()).when(noticeService).deleteNotice(serviceTarget);
+		doThrow(new UnauthorizedTaskException("")).when(noticeService).deleteNotice(serviceTarget);
 
 		//when
 		ResultActions perform = mvc.perform(delete(baseUrl + "/{noticeId}", serviceTarget.getNoticeId()).contentType(MediaType.APPLICATION_JSON)

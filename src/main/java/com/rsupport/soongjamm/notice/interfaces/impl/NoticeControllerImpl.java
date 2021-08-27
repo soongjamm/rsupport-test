@@ -1,8 +1,11 @@
 package com.rsupport.soongjamm.notice.interfaces.impl;
 
+import com.rsupport.soongjamm.notice.Notices;
 import com.rsupport.soongjamm.notice.application.NoticeService;
 import com.rsupport.soongjamm.notice.application.impl.UnauthorizedTaskException;
 import com.rsupport.soongjamm.notice.interfaces.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +19,12 @@ public class NoticeControllerImpl implements NoticeController {
 
 	public NoticeControllerImpl(NoticeService noticeService) {
 		this.noticeService = noticeService;
+	}
+
+	@Override
+	public ResponseEntity<?> getNoticeList(Integer offset, Integer limit) {
+		PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(Sort.Direction.DESC, "id"));
+		return ResponseEntity.ok(noticeService.getNotices(pageRequest));
 	}
 
 	@Override
