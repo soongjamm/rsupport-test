@@ -16,10 +16,10 @@ public class NoticeDetail {
 	private String title;
 	private String author;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-	private LocalDateTime lastModifiedAt;
+	private LocalDateTime lastModifiedDate;
 	private String content;
 
 	public static NoticeDetail from(Notice notice) {
-		return new NoticeDetail(notice.getId(), notice.getTitle(), notice.getAuthor(), notice.getLastModifiedAt(), notice.getContent());
+		return new NoticeDetail(notice.getId(), notice.getTitle(), notice.getAuthor(), notice.getLastModifiedDate(), notice.getContent());
 	}
 }

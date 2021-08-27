@@ -17,8 +17,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import java.time.*;
-
 import static com.rsupport.soongjamm.notice.TestData.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -60,8 +58,8 @@ class NoticeControllerTest {
 				.andExpect(status().isCreated())
 				.andExpect(jsonPath("$.title").value("제목"))
 				.andExpect(jsonPath("$.author").value("작성자"))
-				.andExpect(jsonPath("$.lastModifiedAt").value(LocalDateTime.now(clock).toString()))
 				.andExpect(jsonPath("$.content").value("내용"));
 	}
+
 
 }

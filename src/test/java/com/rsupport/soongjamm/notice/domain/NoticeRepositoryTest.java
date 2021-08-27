@@ -22,7 +22,7 @@ class NoticeRepositoryTest {
 	@Test
 	void saved__notice_in_persistence_has_same_content() {
 		//given
-		Notice notice = new Notice("제목", "작성자", LocalDateTime.now(), "내용");
+		Notice notice = new Notice("제목", "작성자", "내용");
 		Notice saved = noticeRepository.saveAndFlush(notice);
 		entityManager.clear();
 
@@ -31,6 +31,20 @@ class NoticeRepositoryTest {
 
 		//then
 		assertThat(found).isEqualTo(saved);
+	}
 
+	@Test
+	void timeBaseEntity_create_date_automatically() {
+		//given
+		Notice notice = new Notice("제목", "작성자", "내용");
+		Notice saved = noticeRepository.saveAndFlush(notice);
+		entityManager.clear();
+
+		//when
+		Notice found = noticeRepository.findById(saved.getId()).get();
+
+		//then
+		assertThat(found.getCreateDate()).isNotNull();
+		assertThat(found.getLastModifiedDate()).isNotNull();
 	}
 }
