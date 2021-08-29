@@ -24,6 +24,11 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
+	public Notice getANotice(Long noticeId) {
+		return noticeRepository.findById(noticeId).orElseThrow(() -> new IllegalArgumentException("잘못된 공지번호 입니다."));
+	}
+
+	@Override
 	public Notices getNotices(PageRequest pageRequest) {
 		Page<Notice> found = noticeRepository.findAll(pageRequest);
 		List<Notice> collect = found.stream().collect(Collectors.toList());

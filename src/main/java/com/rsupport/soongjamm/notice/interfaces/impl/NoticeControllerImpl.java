@@ -1,6 +1,5 @@
 package com.rsupport.soongjamm.notice.interfaces.impl;
 
-import com.rsupport.soongjamm.notice.Notices;
 import com.rsupport.soongjamm.notice.application.NoticeService;
 import com.rsupport.soongjamm.notice.application.impl.UnauthorizedTaskException;
 import com.rsupport.soongjamm.notice.interfaces.*;
@@ -19,6 +18,15 @@ public class NoticeControllerImpl implements NoticeController {
 
 	public NoticeControllerImpl(NoticeService noticeService) {
 		this.noticeService = noticeService;
+	}
+
+	@Override
+	public ResponseEntity<?> getANotice(Long noticeId) {
+		try {
+			return ResponseEntity.ok(noticeService.getANotice(noticeId));
+		} catch (IllegalArgumentException exception) {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 	@Override

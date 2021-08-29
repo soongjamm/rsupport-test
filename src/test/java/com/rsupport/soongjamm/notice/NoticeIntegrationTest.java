@@ -107,4 +107,18 @@ public class NoticeIntegrationTest {
 		//then
 		result.getStatusCode().is2xxSuccessful();
 	}
+
+	@Test
+	void get_a_notice() {
+		//given
+		Notice saved = noticeRepository.save(notice().build());
+		System.out.println(noticeRepository.findAll());
+
+		//when
+		ResponseEntity<Notice> result = template.getForEntity("/{id}", Notice.class, saved.getId());
+
+		//then
+		result.getStatusCode().is2xxSuccessful();
+	}
+
 }

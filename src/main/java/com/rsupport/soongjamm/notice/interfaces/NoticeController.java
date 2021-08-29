@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/notices")
 public interface NoticeController {
 
+	@GetMapping("/{noticeId}")
+	ResponseEntity<?> getANotice(@PathVariable Long noticeId);
+
 	@GetMapping
 	ResponseEntity<?> getNoticeList(@RequestParam Integer limit, @RequestParam Integer offset);
 
