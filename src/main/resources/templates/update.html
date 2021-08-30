@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/layout">
+
+<div layout:fragment="content" class="bg-success m-5">
+    <div>
+        <form>
+            <div class="form-group">
+                <label>공지 번호</label>
+                <input type="text" id="id" th:value="${notice.id}" readonly>
+            </div>
+            <div class="form-group">
+                <label>제목</label>
+                <input type="text" id="title" placeholder="제목을 입력하세요.">
+            </div>
+            <div class="form-group">
+                <label>작성자</label>
+                <input type="text" id="author" th:value="${notice.author}" readonly>
+            </div>
+            <div class="form-group">
+                <label>내용</label>
+                <textarea id="content" placeholder="내용을 입력하세요."></textarea>
+            </div>
+        </form>
+        <a class="btn btn-primary btn-lg" th:href="@{/notices/__${notice.id}__}"> 취소</a>
+        <button class="btn btn-primary btn-lg" id="btn-update">등록</button>
+    </div>
+</div>
+
+</html>

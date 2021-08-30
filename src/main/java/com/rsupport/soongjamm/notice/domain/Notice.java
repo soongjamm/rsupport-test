@@ -1,7 +1,7 @@
 package com.rsupport.soongjamm.notice.domain;
 
 import com.rsupport.soongjamm.common.BaseTimeEntity;
-import com.rsupport.soongjamm.notice.application.impl.UnauthorizedTaskException;
+import com.rsupport.soongjamm.notice.application.UnauthorizedTaskException;
 import lombok.Builder;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
@@ -61,16 +61,6 @@ public class Notice extends BaseTimeEntity {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
-	}
-
-	@Override
-	public String toString() {
-		return "Notice{" +
-				"id=" + id +
-				", title='" + title + '\'' +
-				", author='" + author + '\'' +
-				", content='" + content + '\'' +
-				"} " + super.toString();
 	}
 
 	public void update(String title, String content, String author) {

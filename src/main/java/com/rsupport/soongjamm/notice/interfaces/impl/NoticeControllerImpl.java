@@ -1,15 +1,21 @@
 package com.rsupport.soongjamm.notice.interfaces.impl;
 
+import com.rsupport.soongjamm.notice.Notices;
 import com.rsupport.soongjamm.notice.application.NoticeService;
-import com.rsupport.soongjamm.notice.application.impl.UnauthorizedTaskException;
+import com.rsupport.soongjamm.notice.application.UnauthorizedTaskException;
+import com.rsupport.soongjamm.notice.domain.Notice;
 import com.rsupport.soongjamm.notice.interfaces.*;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class NoticeControllerImpl implements NoticeController {
@@ -23,16 +29,19 @@ public class NoticeControllerImpl implements NoticeController {
 	@Override
 	public ResponseEntity<?> getANotice(Long noticeId) {
 		try {
-			return ResponseEntity.ok(noticeService.getANotice(noticeId));
+			Notice aNotice = noticeService.getANotice(noticeId);
+			return ResponseEntity.ok(NoticeDetail.from(aNotice));
 		} catch (IllegalArgumentException exception) {
 			return ResponseEntity.notFound().build();
 		}
 	}
 
 	@Override
-	public ResponseEntity<?> getNoticeList(Integer offset, Integer limit) {
-		PageRequest pageRequest = PageRequest.of(offset, limit, Sort.by(Sort.Direction.DESC, "id"));
-		return ResponseEntity.ok(noticeService.getNotices(pageRequest));
+	public ResponseEntity<?> getNoticeList(Integer page, Integer size) {
+		Pageable pageRequest = PageRequest.of(page, size, Sort.by("id").descending());
+		Page<Notice> pages = noticeService.getNotices(pageRequest);
+		List<NoticeDetail> notices = pages.stream().map(NoticeDetail::from).collect(Collectors.toList());
+		return ResponseEntity.ok(new Notices(notices, pages.getTotalPages(), page));
 	}
 
 	@Override

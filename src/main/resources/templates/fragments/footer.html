@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<footer th:fragment="footerFragment">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        var main = {
+            init: function () {
+                var _this = this;
+                $('#btn-save').on('click', function () {
+                    _this.save();
+                });
+                $('#btn-update').on('click', function () {
+                    _this.update();
+                });
+                $('#btn-delete').on('click', function () {
+                    _this.delete();
+                });
+            },
+            save: function () {
+                var data = {
+                    title: $('#title').val(),
+                    author: $('#author').val(),
+                    content: $('#content').val()
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/api/notices',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data)
+                }).done(function () {
+                    alert('등록 완료')
+                    window.location.href = '/';
+                }).fail(function (error) {
+                    alert(JSON.stringify(error));
+                });
+            },
+
+            update: function () {
+                var id = $('#id').val();
+                var data = {
+                    title: $('#title').val(),
+                    author: $('#author').val(),
+                    content: $('#content').val()
+                };
+                $.ajax({
+                    type: 'PUT',
+                    url: '/api/notices/' + id,
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data)
+                }).done(function () {
+                    alert('수정 완료')
+                    window.location.href = '/';
+                }).fail(function (error) {
+                    alert(JSON.stringify(error));
+                });
+            },
+            delete: function () {
+                var id = $('#id').val();
+                var data = {
+                    author: $('#author').val()
+                }
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/api/notices/' + id,
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data)
+                }).done(function () {
+                    alert('삭제 완료')
+                    window.location.href = '/';
+                }).fail(function (error) {
+                    alert(JSON.stringify(error));
+                });
+            }
+        }
+        main.init();
+    </script>
+</footer>
+</html>

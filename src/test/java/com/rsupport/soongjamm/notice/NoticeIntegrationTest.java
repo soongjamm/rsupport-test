@@ -49,17 +49,16 @@ public class NoticeIntegrationTest {
 		}
 		noticeRepository.saveAllAndFlush(init);
 		System.out.println(noticeRepository.findAll());
-		int offset = 1;
-		int limit = 10;
+		int page = 1;
+		int size = 10;
 
 		//when
-		ResponseEntity<Notices> result = template.getForEntity("/?offset={offset}&limit={limit}", Notices.class, offset, limit);
+		ResponseEntity<Notices> result = template.getForEntity("/?page={page}&size={size}", Notices.class, page, size);
 		List<Notice> notices = result.getBody().getNotices();
 
 		//then
 		result.getStatusCode().is2xxSuccessful();
 		assertThat(notices.size()).isEqualTo(10);
-		assertThat(notices.get(0).getId()).isEqualTo(20);
 	}
 
 	@Test

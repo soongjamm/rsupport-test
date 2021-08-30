@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/layout">
+
+<div layout:fragment="content" class="bg-success m-5">
+    <br>
+    <div class="jumbotron">
+        <input type="hidden" th:id="id" th:value="${notice.id}"/>
+        <input type="hidden" th:id="author" th:value="${notice.author}"/>
+
+        <h1 class="display-4" th:text="${notice.title}"></h1>
+        <label>공지 번호 : </label><span th:class="lead" th:text="${notice.id}"></span><br>
+        <label>글쓴이 : </label><span th:class="lead" th:text="${notice.author}"></span><br>
+        <label>작성일자 : </label> <span th:class="lead" th:text="${notice.createDate}"></span><br>
+        <label>수정일자 : </label><span th:class="lead" th:text="${notice.lastModifiedDate}"></span><br>
+        <hr class="my-4">
+        <p th:text="${notice.content}"></p>
+        <button class="btn btn-primary btn-lg" id="btn-delete">삭제</button>
+        <a class="btn btn-primary btn-lg" th:href="@{/notices/__${notice.id}__/update}">수정</a>
+    </div>
+</div>
+
+</html>

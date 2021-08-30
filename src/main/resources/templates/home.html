@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/layout">
+
+<div layout:fragment="content" class="bg-success m-5">
+    <div>
+        <table class="table">
+            <tbody>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+            <tr th:each="notice : ${notices.getNotices()}">
+                <td><a th:href="@{/notices/__${notice.id}__}"><span th:text="${notice.title}"></span></a></td>
+                <td><span th:text="${notice.author}"></span></td>
+                <td><span th:text="${notice.createDate}"></span></td>
+            </tr>
+            </tbody>
+        </table>
+        <th:block th:each="num : ${#numbers.sequence(0, notices.getTotalPages() - 1)}">
+            <a th:href="@{/(page=${num})}">
+                <td><span th:text="${num}+1"></span></td>
+            </a>
+        </th:block>
+    </div>
+</div>
+</html>

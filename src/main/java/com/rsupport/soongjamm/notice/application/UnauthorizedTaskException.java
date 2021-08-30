@@ -1,4 +1,4 @@
-package com.rsupport.soongjamm.notice.application.impl;
+package com.rsupport.soongjamm.notice.application;
 
 public class UnauthorizedTaskException extends RuntimeException {
 

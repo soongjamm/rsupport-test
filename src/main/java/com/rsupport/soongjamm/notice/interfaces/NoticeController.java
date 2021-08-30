@@ -10,7 +10,7 @@ public interface NoticeController {
 	ResponseEntity<?> getANotice(@PathVariable Long noticeId);
 
 	@GetMapping
-	ResponseEntity<?> getNoticeList(@RequestParam Integer limit, @RequestParam Integer offset);
+	ResponseEntity<?> getNoticeList(@RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "10") Integer size);
 
 	@PostMapping
 	ResponseEntity<?> createNotice(@RequestBody CreateNoticeRequest dto);

@@ -1,14 +1,14 @@
 package com.rsupport.soongjamm.notice.application;
 
-import com.rsupport.soongjamm.notice.Notices;
 import com.rsupport.soongjamm.notice.domain.Notice;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface NoticeService {
 
 	Notice getANotice(Long noticeId);
 
-	Notices getNotices(PageRequest pageRequest);
+	Page<Notice> getNotices(Pageable pageRequest);
 
 	Notice createNotice(CreateNoticeTarget target);
 

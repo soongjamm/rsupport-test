@@ -7,7 +7,7 @@ import com.rsupport.soongjamm.notice.application.CreateNoticeTarget;
 import com.rsupport.soongjamm.notice.application.DeleteNoticeTarget;
 import com.rsupport.soongjamm.notice.application.NoticeService;
 import com.rsupport.soongjamm.notice.application.UpdateNoticeTarget;
-import com.rsupport.soongjamm.notice.application.impl.UnauthorizedTaskException;
+import com.rsupport.soongjamm.notice.application.UnauthorizedTaskException;
 import com.rsupport.soongjamm.notice.interfaces.impl.NoticeControllerImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

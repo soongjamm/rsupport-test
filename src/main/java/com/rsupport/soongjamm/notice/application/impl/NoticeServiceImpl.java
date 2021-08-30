@@ -8,11 +8,10 @@ import com.rsupport.soongjamm.notice.domain.NoticeRepository;
 import com.rsupport.soongjamm.notice.application.NoticeService;
 import com.rsupport.soongjamm.notice.domain.Notice;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.transaction.Transactional;
 
 @Service
 public class NoticeServiceImpl implements NoticeService {
@@ -29,10 +28,8 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
-	public Notices getNotices(PageRequest pageRequest) {
-		Page<Notice> found = noticeRepository.findAll(pageRequest);
-		List<Notice> collect = found.stream().collect(Collectors.toList());
-		return new Notices(collect, found.getTotalPages(), pageRequest.getPageNumber());
+	public Page<Notice> getNotices(Pageable pageRequest) {
+		return noticeRepository.findAll(pageRequest);
 	}
 
 	@Override
@@ -42,6 +39,7 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	@Override
+	@Transactional
 	public Notice updateNotice(UpdateNoticeTarget target) {
 		Notice notice = noticeRepository.findById(target.getNoticeId()).orElseThrow(() -> new IllegalArgumentException("잘못된 공지번호 입니다."));
 		notice.update(target.getTitle(), target.getContent(), target.getAuthor());
