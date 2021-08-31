@@ -1,7 +1,7 @@
 # 공지사항 웹 애플리케이션
 
 ### 실행 방법
-```aidl
+```
 ./gradlew clean
 ./gradlew build
 java -jar ./build/libs/notice-0.0.1-SNAPSHOT.jar
